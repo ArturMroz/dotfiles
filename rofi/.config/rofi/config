@@ -1,0 +1,80 @@
+include "/usr/share//rofi/themes//Adapta-Nokto.theme"
+rofi.location:          0
+rofi.color-enabled:     true
+!                       'background', 'border'
+rofi.color-window:      argb:dc111111, argb:dc111111
+! State:                'bg',          'fg',   'bgalt',       'hlbg',        'hlfg'
+#rofi.color-normal:      argb:00333333, #ffffff, argb:00333333, argb:00333333, argb:ffefa211
+#rofi.color-urgent:      argb:00333333, #eeee3333, argb:00333333, argb:00333333, argb:ffefa211
+#rofi.color-active:      argb:00333333, #ee3355bb, argb:00333333, argb:00333333, argb:ffefa211
+! rofi.separator-style:   solid
+rofi.fullscreen:	false
+rofi.padding:           430
+rofi.hide-scrollbar:    true
+rofi.line-margin:       5
+rofi.fake-transparency: true
+rofi.yoffset:           0
+rofi.xoffset:           0
+#rofi.width:            1920
+#rofi.height:		1080
+rofi.opacity:           90
+rofi.font: SourceCodePro-Regular 16
+rofi.lines: 5
+
+
+! === rofi ===
+
+rofi.fullscreen:	false
+rofi.padding:		20
+
+rofi.modi:                           window,drun,run
+#rofi.sidebar-mode:                   true
+
+rofi.terminal:                       xfce4-terminal
+rofi.ssh-client:                     ssh
+rofi.ssh-command:                    {terminal} -e "{ssh-client} {host}"
+
+rofi.opacity:                        80
+rofi.width:                          50
+rofi.lines:                          8
+rofi.columns:                        2
+rofi.font:                           Inconsolata 16
+rofi.font:                           OperatorMono 16
+rofi.fg:                             #5294E2
+rofi.bg:                             #5d729f
+rofi.fg-active:                      #34405a
+rofi.fg-urgent:                      #34405a
+rofi.hlfg-active:                    #5e73a0
+rofi.hlfg-urgent:                    #5e73a0
+rofi.bg-active:                      #34405a
+rofi.bg-urgent:                      #34405a
+rofi.hlbg-active:                    #5d729f
+rofi.hlbg-urgent:                    #5d729f
+rofi.bgalt:                          #5671a0
+rofi.hlfg:                           #34405a
+rofi.hlbg:                           #34405a
+rofi.bc:                             #789ee1
+! State:           'bg',     'fg',     'bgalt',  'hlbg',   'hlfg'
+rofi.color-normal: #353944,  #FFFFFF,  #353944,  #5294E2,  #FFFFFF
+rofi.color-normal: #353944,  #FFFFFF,  #353944,  #5294E2,  #FFFFFF
+rofi.color-normal: #353944,  #FFFFFF,  #353944,  #5294E2,  #FFFFFF
+
+!                  'background', 'border'
+rofi.color-window: #353944,      #404552
+rofi.bw:                             0
+rofi.location:                       0
+rofi.line-margin:                    2
+rofi.separator-style:                none
+rofi.hide-scrollbar:                 true
+rofi.markup-rows:                    false
+rofi.scrollbar-width: 8
+
+rofi.levenshtein-sort:               true
+rofi.case-sensitive:                 false
+rofi.fuzzy:			     true
+
+#include "~/.cache/wal/colors-rofi-dark.rasi
+
+! rofi.theme: "~/.cache/wal/colors-rofi-dark.rasi"
+
+#include "/usr/share//rofi/themes//nord.theme"
