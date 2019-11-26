@@ -41,7 +41,7 @@ export UPDATE_ZSH_DAYS=13
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
@@ -140,8 +140,9 @@ alias perform="sudo cpufreq-set -r -g performance"
 alias c="xclip -selection c"
 alias v="xclip -selection c -o"
 
-alias dwarfs="~/Downloads/packages/LinuxLNP-0.44.12-r02/startlnp"
-
+alias mrl='mogrify -rotate -90' 
+alias mrr='mogrify -rotate 90' 
+alias mrs='mogrify -resize 1000 -sharpen 0x1' 
 
 export EDITOR=/usr/bin/vim
 
