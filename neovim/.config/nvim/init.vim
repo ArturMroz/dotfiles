@@ -1,7 +1,5 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'ryanoasis/vim-devicons'
-
 Plug 'arcticicestudio/nord-vim'
 
 Plug 'tpope/vim-commentary'
@@ -21,19 +19,24 @@ Plug 'junegunn/fzf.vim'
 Plug 'takac/vim-hardtime'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 Plug 'machakann/vim-highlightedyank'
 
 Plug 'prurigro/vim-polyglot-darkcloud'
 
-" Plug 'vim-airline/vim-airline-themes'
-" Plug 'vim-airline/vim-airline'
-" Plug 'junegunn/fzf'
-"
+Plug 'wellle/targets.vim'
+Plug 'cohama/lexima.vim'
+
+Plug 'ryanoasis/vim-devicons'
+
 call plug#end()
 
 colorscheme nord
 
 set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
+
+set ignorecase smartcase
+
 set listchars=space:·,tab:>-,trail:~,extends:>,precedes:<
 set list
 
@@ -91,7 +94,7 @@ inoremap {;<CR> {<CR>};<ESC>O
 " COC ------------------------------
 
 " Better display for messages
-set cmdheight=2
+set cmdheight=1
 
 " You will have bad experience for diagnostic messages when it's default 4000.
 set updatetime=300
@@ -105,9 +108,9 @@ set signcolumn=yes
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
@@ -158,7 +161,9 @@ let g:lightline = {
 \ },
 \ 'component_function': {
 \   'readonly': 'LightlineReadonly',
-\   'fugitive': 'LightlineFugitive'
+\   'fugitive': 'LightlineFugitive',
+\   'filetype': 'LightLineFiletype',
+\   'fileformat': 'LightLineFileformat',
 \ },
 \ 'colorscheme': 'nord',
 \ 'separator': { 'left': '', 'right': '' },
@@ -175,4 +180,13 @@ function! LightlineFugitive()
     return branch !=# '' ? ''.branch : ''
   endif
   return ''
+endfunction
+
+function! LightLineFiletype()
+  "return winwidth(0) > 70 ? (strlen(&filetype) ? ' ' . WebDevIconsGetFileTypeSymbol() . ' ' . &filetype : '') : ''
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+endfunction
+
+function! LightLineFileformat()
+  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
 endfunction
