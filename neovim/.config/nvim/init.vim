@@ -1,50 +1,55 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'arcticicestudio/nord-vim'
+" Plug 'liuchengxu/vista.vim'
+" Plug 'jreybert/vimagit'
 
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 
 Plug 'easymotion/vim-easymotion'
 Plug 'justinmk/vim-sneak'
 Plug 'unblevable/quick-scope'
 
+Plug 'takac/vim-hardtime'
+Plug 'wellle/targets.vim'
+Plug 'cohama/lexima.vim'
+Plug 'machakann/vim-highlightedyank'
+
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
+
 Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-Plug 'takac/vim-hardtime'
-
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-Plug 'machakann/vim-highlightedyank'
-
+Plug 'HerringtonDarkholme/yats.vim'
 Plug 'prurigro/vim-polyglot-darkcloud'
 
-Plug 'wellle/targets.vim'
-Plug 'cohama/lexima.vim'
-
 Plug 'ryanoasis/vim-devicons'
+
+Plug 'arcticicestudio/nord-vim'
 
 call plug#end()
 
 colorscheme nord
 
-set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
-
+set number relativenumber
 set ignorecase smartcase
 
+set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
+
 set listchars=space:·,tab:>-,trail:~,extends:>,precedes:<
-set list
+" set list
+
+set autoindent
+filetype plugin indent on
 
 set termguicolors
 " set background=dark
-
-set number
-set relativenumber
 
 let mapleader=" "
 
@@ -55,16 +60,28 @@ nnoremap <leader>p "+p
 
 nnoremap <leader>s :w<CR>
 nnoremap <leader>a ggVG
-" nnoremap <leader>R :source ~/.config/nvim/init.vim<CR>
-nnoremap <leader>vs :so $MYVIMRC<CR>
-nnoremap <leader>ve :e $MYVIMRC<CR>
+
 nnoremap <CR> o<Esc>
 nnoremap <leader>n :nohl<CR>
 nnoremap <M-k> ddP
 nnoremap <M-j> ddp
-map <C-n> :NERDTreeToggle<CR>
-map <C-p> :Files<CR>
-map <leader>h :History<CR>
+
+nnoremap <leader>vs :so $MYVIMRC<CR>
+nnoremap <leader>ve :e $MYVIMRC<CR>
+nnoremap <leader>vi :PlugInstall<CR>
+nnoremap <leader>vc :PlugClean<CR>
+
+nnoremap <C-n> :NERDTreeToggle<CR>
+nnoremap <leader><C-n> :NERDTreeFind<CR>
+
+nnoremap <C-p> :Files<CR>
+nnoremap <leader>ff :Files<CR>
+nnoremap <leader>fh :History<CR>
+nnoremap <leader>fc :Commits<CR>
+nnoremap <leader>fb :Buffers<CR>
+nnoremap <leader>fx :Commands<CR>
+nnoremap <leader>f/ :BLines<cr> 
+nnoremap <leader>/ :Ag<cr> 
 
 if exists('$TMUX')
     " Colors in tmux
@@ -83,18 +100,7 @@ hi SignColumn guibg=NONE
 
 let g:hardtime_default_on = 1
 
-inoremap " ""<left>
-inoremap ' ''<left>
-inoremap ( ()<left>
-inoremap [ []<left>
-inoremap { {}<left>
-inoremap {<CR> {<CR>}<ESC>O
-inoremap {;<CR> {<CR>};<ESC>O
-
 " COC ------------------------------
-
-" Better display for messages
-set cmdheight=1
 
 " You will have bad experience for diagnostic messages when it's default 4000.
 set updatetime=300
@@ -141,7 +147,7 @@ nmap <silent> gr <Plug>(coc-references)
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
+nmap <F2> <Plug>(coc-rename)
 
 " Remap for format selected region
 xmap <leader>f  <Plug>(coc-format-selected)
@@ -190,3 +196,27 @@ endfunction
 function! LightLineFileformat()
   return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
 endfunction
+
+function! FloatingFZF()
+  let buf = nvim_create_buf(v:false, v:true)
+  call setbufvar(buf, '&signcolumn', 'no')
+
+  let height = float2nr(20)
+  let width = float2nr(90)
+  let horizontal = float2nr((&columns - width) / 2)
+  let vertical = 1
+
+  let opts = {
+        \ 'relative': 'editor',
+        \ 'row': vertical,
+        \ 'col': horizontal,
+        \ 'width': width,
+        \ 'height': height,
+        \ 'style': 'minimal'
+        \ }
+
+  call nvim_open_win(buf, v:true, opts)
+endfunction
+
+let $FZF_DEFAULT_OPTS='--layout=reverse --margin=1,2'
+let g:fzf_layout = { 'window': 'call FloatingFZF()' }
