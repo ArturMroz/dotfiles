@@ -1,14 +1,18 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
 " Plug 'liuchengxu/vista.vim'
+Plug 'airblade/vim-rooter'
 " Plug 'jreybert/vimagit'
 
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'vim-scripts/ReplaceWithRegister'
 
-Plug 'easymotion/vim-easymotion'
 Plug 'justinmk/vim-sneak'
+Plug 'tpope/vim-unimpaired'
 Plug 'unblevable/quick-scope'
+Plug 'easymotion/vim-easymotion'
 
 Plug 'takac/vim-hardtime'
 Plug 'wellle/targets.vim'
@@ -16,7 +20,11 @@ Plug 'cohama/lexima.vim'
 Plug 'machakann/vim-highlightedyank'
 
 Plug 'itchyny/lightline.vim'
-Plug 'scrooloose/nerdtree'
+Plug 'ryanoasis/vim-devicons'
+
+Plug 'scrooloose/nerdtree', { 'on': [ 'NERDTreeToggle', 'NERDTreeFind' ] }
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': [ 'NERDTreeToggle', 'NERDTreeFind' ] }
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight', { 'on': [ 'NERDTreeToggle', 'NERDTreeFind' ] }
 
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
@@ -29,47 +37,55 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'prurigro/vim-polyglot-darkcloud'
 
-Plug 'ryanoasis/vim-devicons'
-
-Plug 'arcticicestudio/nord-vim'
+" Plug 'arcticicestudio/nord-vim'
+Plug 'gruvbox-community/gruvbox'
 
 call plug#end()
 
-colorscheme nord
+let g:gruvbox_italic = 1
+colorscheme gruvbox
+
+" let g:nord_uniform_diff_background = 1
+" let g:nord_italic = 1
+" let g:nord_italic_comments = 1
+" let g:nord_comment_brightness = 1
+" colorscheme nord
 
 set number relativenumber
 set ignorecase smartcase
+set incsearch hlsearch
 
 set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
 
 set listchars=space:·,tab:>-,trail:~,extends:>,precedes:<
-" set list
+set list
 
 set autoindent
 filetype plugin indent on
 
 set termguicolors
-" set background=dark
+set encoding=UTF-8
+set background=dark
+
+set updatetime=300
 
 let mapleader=" "
 
 imap jk <Esc>
-
+nnoremap Y y$
+nnoremap <CR> o<Esc>
 vnoremap <leader>y "+y
 nnoremap <leader>p "+p
-
 nnoremap <leader>s :w<CR>
-nnoremap <leader>a ggVG
-
-nnoremap <CR> o<Esc>
+" nnoremap <leader>a ggVG
 nnoremap <leader>n :nohl<CR>
-nnoremap <M-k> ddP
-nnoremap <M-j> ddp
 
 nnoremap <leader>vs :so $MYVIMRC<CR>
 nnoremap <leader>ve :e $MYVIMRC<CR>
 nnoremap <leader>vi :PlugInstall<CR>
 nnoremap <leader>vc :PlugClean<CR>
+nnoremap <leader>vd :PlugUpdate<CR>
+nnoremap <leader>vg :PlugUpgrade<CR>
 
 nnoremap <C-n> :NERDTreeToggle<CR>
 nnoremap <leader><C-n> :NERDTreeFind<CR>
@@ -77,11 +93,25 @@ nnoremap <leader><C-n> :NERDTreeFind<CR>
 nnoremap <C-p> :Files<CR>
 nnoremap <leader>ff :Files<CR>
 nnoremap <leader>fh :History<CR>
+nnoremap <leader>f: :History:<CR>
 nnoremap <leader>fc :Commits<CR>
 nnoremap <leader>fb :Buffers<CR>
 nnoremap <leader>fx :Commands<CR>
-nnoremap <leader>f/ :BLines<cr> 
-nnoremap <leader>/ :Ag<cr> 
+nnoremap <leader>f/ :BLines<cr>
+nnoremap <leader>fl :Lines<cr>
+nnoremap <leader>/ :Rg<CR>
+nnoremap m/ :Marks<cr>
+
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+nnoremap <silent> <Leader>= :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+
+nnoremap <silent> <Leader><Up> :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader><Down> :exe "resize " . (winheight(0) * 2/3)<CR>
 
 if exists('$TMUX')
     " Colors in tmux
@@ -89,21 +119,26 @@ if exists('$TMUX')
     let &t_8b = "<Esc>[48;2;%lu;%lu;%lum"
 endif
 
-let g:nord_italic = 1
-let g:nord_italic_comments = 1
-" let g:nord_comment_brightness = 1
+" hi Normal guibg=NONE ctermbg=NONE
+" hi LineNr guibg=NONE ctermbg=NONE
+" hi CursorLineNr guibg=dark ctermbg=NONE
+" hi SignColumn guibg=NONE
 
-hi Normal guibg=NONE ctermbg=NONE
-hi LineNr guibg=NONE ctermbg=NONE
-hi CursorLineNr guibg=dark ctermbg=NONE
-hi SignColumn guibg=NONE
+
+" ---------- PLUGINS ----------
+
+let g:rooter_manual_only = 1
 
 let g:hardtime_default_on = 1
+let g:hardtime_ignore_buffer_patterns = [ "NERD.*" ]
+let g:hardtime_ignore_quickfix = 1
+let g:hardtime_allow_different_key = 1
 
-" COC ------------------------------
+" let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
-" You will have bad experience for diagnostic messages when it's default 4000.
-set updatetime=300
+" COC --------------------
+
+let g:coc_global_extensions=[ 'coc-omnisharp', 'coc-tsserver' ]
 
 " don't give |ins-completion-menu| messages.
 set shortmess+=c
@@ -127,6 +162,17 @@ endfunction
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -143,15 +189,50 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
 " Remap for rename current word
 nmap <F2> <Plug>(coc-rename)
 
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
 " Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>cf  <Plug>(coc-format-selected)
+nmap <leader>cf  <Plug>(coc-format-selected)
+
+" Remap for do codeAction of current line
+nmap <leader>ca  <Plug>(coc-codeaction)
+
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Create mappings for function text object, requires document symbols feature of languageserver.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+" nmap <silent> <C-d> <Plug>(coc-range-select)
+" xmap <silent> <C-d> <Plug>(coc-range-select)
+
+" Using CocList
+" Show all diagnostics
+nnoremap <silent> <leader>cd  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+nnoremap <silent> <leader>ce  :<C-u>CocList extensions<cr>
+" Show commands
+nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
+" Find symbol of current document
+nnoremap <silent> <leader>co  :<C-u>CocList outline<cr>
+" Search workleader symbols
+nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <leader>cj  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <leader>ck  :<C-u>CocPrev<CR>
+" Resume latest coc list
+nnoremap <silent> <leader>cp  :<C-u>CocListResume<CR>
 
 augroup mygroup
   autocmd!
@@ -160,6 +241,24 @@ augroup mygroup
   " Update signature help on jump placeholder
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+
+" Use `:Fold` to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" use `:OR` for organize import of current buffer
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add status line support, for integration with other plugin, checkout `:h coc-status`
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+
+" LIGHTLINE --------------------
 
 let g:lightline = {
 \ 'component': {
@@ -171,7 +270,7 @@ let g:lightline = {
 \   'filetype': 'LightLineFiletype',
 \   'fileformat': 'LightLineFileformat',
 \ },
-\ 'colorscheme': 'nord',
+\ 'colorscheme': 'gruvbox',
 \ 'separator': { 'left': '', 'right': '' },
 \ 'subseparator': { 'left': '', 'right': '' }
 \ }
@@ -197,12 +296,14 @@ function! LightLineFileformat()
   return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
 endfunction
 
+" FZF --------------------
+
 function! FloatingFZF()
   let buf = nvim_create_buf(v:false, v:true)
   call setbufvar(buf, '&signcolumn', 'no')
 
   let height = float2nr(20)
-  let width = float2nr(90)
+  let width = float2nr(120)
   let horizontal = float2nr((&columns - width) / 2)
   let vertical = 1
 
@@ -218,5 +319,29 @@ function! FloatingFZF()
   call nvim_open_win(buf, v:true, opts)
 endfunction
 
-let $FZF_DEFAULT_OPTS='--layout=reverse --margin=1,2'
+let $FZF_DEFAULT_OPTS='--layout=reverse --margin=1,2 --color fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C'
 let g:fzf_layout = { 'window': 'call FloatingFZF()' }
+
+" autocmd BufEnter * silent! lcd %:p:h
+
+" let g:fzf_colors = {
+"     \ 'fg':      ['fg', 'GruvboxGray'],
+"     \ 'bg':      ['bg', 'Normal'],
+"     \ 'hl':      ['fg', 'GruvboxRed'],
+"     \ 'fg+':     ['fg', 'GruvboxGreen'],
+"     \ 'bg+':     ['bg', 'GruvboxBg1'],
+"     \ 'hl+':     ['fg', 'GruvboxRed'],
+"     \ 'info':    ['fg', 'GruvboxOrange'],
+"     \ 'prompt':  ['fg', 'GruvboxBlue'],
+"     \ 'header':  ['fg', 'GruvboxBlue'],
+"     \ 'pointer': ['fg', 'Error'],
+"     \ 'marker':  ['fg', 'Error'],
+"     \ 'spinner': ['fg', 'Statement'],
+"     \ }
+"
+if executable("rg")
+  let $FZF_DEFAULT_COMMAND = 'rg --files'
+  set grepprg=rg\ --vimgrep\ --no-heading
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
