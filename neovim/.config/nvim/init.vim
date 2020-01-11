@@ -1,5 +1,6 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
+Plug 'mhinz/vim-startify'
 " Plug 'liuchengxu/vista.vim'
 Plug 'airblade/vim-rooter'
 " Plug 'jreybert/vimagit'
@@ -39,11 +40,16 @@ Plug 'prurigro/vim-polyglot-darkcloud'
 
 " Plug 'arcticicestudio/nord-vim'
 Plug 'gruvbox-community/gruvbox'
+Plug 'sainnhe/gruvbox-material'
 
 call plug#end()
 
-let g:gruvbox_italic = 1
-colorscheme gruvbox
+" let g:gruvbox_material_background = 'medium'
+
+colorscheme gruvbox-material
+
+" let g:gruvbox_italic = 1
+" colorscheme gruvbox
 
 " let g:nord_uniform_diff_background = 1
 " let g:nord_italic = 1
@@ -51,6 +57,7 @@ colorscheme gruvbox
 " let g:nord_comment_brightness = 1
 " colorscheme nord
 
+set hidden
 set number relativenumber
 set ignorecase smartcase
 set incsearch hlsearch
@@ -126,6 +133,8 @@ endif
 
 
 " ---------- PLUGINS ----------
+"
+let NERDTreeMinimalUI = 1
 
 let g:rooter_manual_only = 1
 
@@ -270,7 +279,7 @@ let g:lightline = {
 \   'filetype': 'LightLineFiletype',
 \   'fileformat': 'LightLineFileformat',
 \ },
-\ 'colorscheme': 'gruvbox',
+\ 'colorscheme': 'gruvbox_material',
 \ 'separator': { 'left': '', 'right': '' },
 \ 'subseparator': { 'left': '', 'right': '' }
 \ }
@@ -319,7 +328,7 @@ function! FloatingFZF()
   call nvim_open_win(buf, v:true, opts)
 endfunction
 
-let $FZF_DEFAULT_OPTS='--layout=reverse --margin=1,2 --color fg:#D8DEE9,bg:#2E3440,hl:#A3BE8C,fg+:#D8DEE9,bg+:#434C5E,hl+:#A3BE8C'
+let $FZF_DEFAULT_OPTS='--layout=reverse --border'
 let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 
 " autocmd BufEnter * silent! lcd %:p:h
@@ -345,3 +354,18 @@ if executable("rg")
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
 
+let g:startify_bookmarks = [
+  \ {'C': '~/Documents/code'},
+  \ {'E': '~/Documents/code/exercism'},
+  \ {'c': '~/.config/nvim/init.vim'},
+  \ {'c': '~/.zshrc'}
+  \ ]
+
+" let g:startify_session_dir = '~/.vim/sessions'
+let g:startify_files_number = 5
+let g:startify_update_oldfiles = 1
+let g:startify_session_delete_buffers = 1 " delete all buffers when loading or closing a session, ignore unsaved buffers
+let g:startify_change_to_dir = 1 " when opening a file or bookmark, change to its directory
+let g:startify_fortune_use_unicode = 1 " beautiful symbols
+let g:startify_padding_left = 3 " the number of spaces used for left padding
+let g:startify_session_remove_lines = ['setlocal', 'winheight'] " lines matching any

@@ -73,6 +73,7 @@ plugins=(
   debian
   # command-not-found
   zsh-autosuggestions
+  zsh-syntax-highlighting
   # zsh-wakatime
 )
 
@@ -144,14 +145,60 @@ alias mrl='mogrify -rotate -90'
 alias mrr='mogrify -rotate 90' 
 alias mrs='mogrify -resize 1000 -sharpen 0x1' 
 
-export EDITOR=/usr/bin/vim
+alias fd=fdfind
+
+alias vim=~/Downloads/appimages/nvim.appimage
+
+# alias fd='cd "$(z | sort -nr | awk '{print $2}' | fzf +s)"'
+
+# export EDITOR=/usr/bin/vim
+export EDITOR=~/Downloads/appimages/nvim.appimage
 
 export LC_ALL="en_GB.UTF-8"
 source $ZSH/oh-my-zsh.sh
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+# export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
+# export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --exclude .git'
+export FZF_DEFAULT_COMMAND='fdfind --type f'
 export FZF_TMUX=1
+
+
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+ # Use fd and fzf to get the args to a command.
+ # Examples:
+ # f mv # To move files. You can write the destination after selecting the files.
+ # f 'echo Selected:'
+ # f 'echo Selected music:' --extention mp3
+ # fm rm # To rm files in current directory
+ f() {
+  sels=( "${(@f)$(fd "${fd_default[@]}" "${@:2}"| fzf)}" )
+  test -n "$sels" && print -z -- "$1 ${sels[@]:q:q}"
+}
+
+unalias z
+z() {
+  if [[ -z "$*" ]]; then
+    cd "$(_z -l 2>&1 | fzf +s --tac | sed 's/^[0-9,.]* *//')"
+  else
+    _last_z_args="$@"
+    _z "$@"
+  fi
+}
+
+zz() {
+  cd "$(_z -l 2>&1 | sed 's/^[0-9,.]* *//' | fzf -q "$_last_z_args")"
+}
+
+alias j=z
+alias jj=zz
 
 fortune -a
