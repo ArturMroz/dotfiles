@@ -1,8 +1,10 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'mhinz/vim-startify'
+Plug 'ludovicchabant/vim-gutentags'
 " Plug 'liuchengxu/vista.vim'
+
 Plug 'airblade/vim-rooter'
+Plug 'mhinz/vim-startify'
 " Plug 'jreybert/vimagit'
 
 Plug 'tpope/vim-commentary'
@@ -79,10 +81,15 @@ set updatetime=300
 let mapleader=" "
 
 imap jk <Esc>
+imap kj <Esc>
+
 nnoremap Y y$
 nnoremap <CR> o<Esc>
 vnoremap <leader>y "+y
+nnoremap <leader>y "+y
 nnoremap <leader>p "+p
+inoremap <C-v> <C-r>+
+
 nnoremap <leader>s :w<CR>
 " nnoremap <leader>a ggVG
 nnoremap <leader>n :nohl<CR>
@@ -103,6 +110,7 @@ nnoremap <leader>fh :History<CR>
 nnoremap <leader>f: :History:<CR>
 nnoremap <leader>fc :Commits<CR>
 nnoremap <leader>fb :Buffers<CR>
+nnoremap <leader>ft :Tags<CR>
 nnoremap <leader>fx :Commands<CR>
 nnoremap <leader>f/ :BLines<cr>
 nnoremap <leader>fl :Lines<cr>
@@ -143,7 +151,7 @@ let g:hardtime_ignore_buffer_patterns = [ "NERD.*" ]
 let g:hardtime_ignore_quickfix = 1
 let g:hardtime_allow_different_key = 1
 
-" let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " COC --------------------
 
@@ -349,10 +357,12 @@ let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 "     \ }
 "
 if executable("rg")
-  let $FZF_DEFAULT_COMMAND = 'rg --files'
+  let $FZF_DEFAULT_COMMAND = 'fdfind -t f'
   set grepprg=rg\ --vimgrep\ --no-heading
   set grepformat=%f:%l:%c:%m,%f:%l:%m
 endif
+
+" STARTIFY --------------------
 
 let g:startify_bookmarks = [
   \ {'C': '~/Documents/code'},
@@ -369,3 +379,81 @@ let g:startify_change_to_dir = 1 " when opening a file or bookmark, change to it
 let g:startify_fortune_use_unicode = 1 " beautiful symbols
 let g:startify_padding_left = 3 " the number of spaces used for left padding
 let g:startify_session_remove_lines = ['setlocal', 'winheight'] " lines matching any
+
+" GUTENTAGS --------------------
+
+let g:gutentags_add_default_project_roots = 0
+let g:gutentags_project_root = ['package.json', '.git']
+
+let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+
+command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
+
+let g:gutentags_generate_on_new = 1
+let g:gutentags_generate_on_missing = 1
+let g:gutentags_generate_on_write = 1
+let g:gutentags_generate_on_empty_buffer = 0
+let g:gutentags_add_default_project_roots = 0
+let g:gutentags_project_root = ['package.json', '.git']
+
+let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+
+command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
+
+" let g:gutentags_generate_on_new = 1
+let g:gutentags_generate_on_missing = 1
+let g:gutentags_generate_on_write = 1
+let g:gutentags_generate_on_empty_buffer = 0
+
+let g:gutentags_ctags_extra_args = [
+      \ '--tag-relative=yes',
+      \ '--fields=+ailmnS',
+      \ ]
+
+let g:gutentags_ctags_exclude = [
+      \ '*.git', '*.svg', '*.hg',
+      \ '*/tests/*',
+      \ 'build',
+      \ 'dist',
+      \ '*sites/*/files/*',
+      \ 'bin',
+      \ 'node_modules',
+      \ 'bower_components',
+      \ 'cache',
+      \ 'compiled',
+      \ 'docs',
+      \ 'example',
+      \ 'bundle',
+      \ 'vendor',
+      \ '*.md',
+      \ '*-lock.json',
+      \ '*.lock',
+      \ '*bundle*.js',
+      \ '*build*.js',
+      \ '.*rc*',
+      \ '*.json',
+      \ '*.min.*',
+      \ '*.map',
+      \ '*.bak',
+      \ '*.zip',
+      \ '*.pyc',
+      \ '*.class',
+      \ '*.sln',
+      \ '*.Master',
+      \ '*.csproj',
+      \ '*.tmp',
+      \ '*.csproj.user',
+      \ '*.cache',
+      \ '*.pdb',
+      \ 'tags*',
+      \ 'cscope.*',
+      \ '*.css',
+      \ '*.less',
+      \ '*.scss',
+      \ '*.exe', '*.dll',
+      \ '*.mp3', '*.ogg', '*.flac',
+      \ '*.swp', '*.swo',
+      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
+      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+      \ ]
