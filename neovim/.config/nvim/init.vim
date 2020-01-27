@@ -44,6 +44,8 @@ Plug 'prurigro/vim-polyglot-darkcloud'
 Plug 'gruvbox-community/gruvbox'
 Plug 'sainnhe/gruvbox-material'
 
+Plug 'jceb/vim-orgmode'
+
 call plug#end()
 
 " let g:gruvbox_material_background = 'medium'
@@ -336,7 +338,7 @@ function! FloatingFZF()
   call nvim_open_win(buf, v:true, opts)
 endfunction
 
-let $FZF_DEFAULT_OPTS='--layout=reverse --border'
+let $FZF_DEFAULT_OPTS='--layout=reverse'
 let g:fzf_layout = { 'window': 'call FloatingFZF()' }
 
 " autocmd BufEnter * silent! lcd %:p:h
@@ -368,7 +370,7 @@ let g:startify_bookmarks = [
   \ {'C': '~/Documents/code'},
   \ {'E': '~/Documents/code/exercism'},
   \ {'c': '~/.config/nvim/init.vim'},
-  \ {'c': '~/.zshrc'}
+  \ {'z': '~/.zshrc'}
   \ ]
 
 " let g:startify_session_dir = '~/.vim/sessions'
