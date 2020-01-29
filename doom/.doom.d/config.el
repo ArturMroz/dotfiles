@@ -55,10 +55,18 @@
 ;; they are implemented.
 
 (custom-set-faces
-  '(org-level-1 ((t (:inherit outline-1 :height 1.17))))
-  '(org-level-2 ((t (:inherit outline-2 :height 1.08))))
-  '(org-level-3 ((t (:inherit outline-3 :height 1.04))))
+  '(org-level-1 ((t (:inherit outline-1 :height 1.15))))
+  '(org-level-2 ((t (:inherit outline-2 :height 1.09))))
+  '(org-level-3 ((t (:inherit outline-3 :height 1.03))))
   '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
   '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
   '(org-document-title ((t (:height 1.2))))
+)
+
+;; TODO numbers increase/dec
+
+(setq
+  org-ellipsis " ▾ "
+  org-bullets-bullet-list '("·")
+  dired-dwim-target t
 )
