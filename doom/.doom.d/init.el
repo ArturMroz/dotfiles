@@ -16,14 +16,12 @@
 ;;      directory (for easy access to its source code).
 
 (doom! :input
-       ;;chinese
-       ;;japanese
 
        :completion
-       company           ; the ultimate code completion backend
-       ;;helm              ; the *other* search engine for love and life
-       ;;ido               ; the other *other* search engine...
-       ivy               ; a search engine for love and life
+       (company           ; the ultimate code completion backend
+        +childframe)
+       (ivy
+        +fuzzy)               ; a search engine for love and life
 
        :ui
        ;;deft              ; notational velocity for Emacs
@@ -36,12 +34,12 @@
        ;;indent-guides     ; highlighted indent columns
        modeline          ; snazzy, Atom-inspired modeline, plus API
        nav-flash         ; blink the current line after jumping
-       ;; neotree           ; a project drawer, like NERDTree for vim
+       neotree           ; a project drawer, like NERDTree for vim
        ophints           ; highlight the region an operation acts on
        (popup            ; tame sudden yet inevitable temporary windows
         +all             ; catch all popups that start with an asterix
         +defaults)       ; default popup rules
-       ;;pretty-code       ; replace bits of code with pretty symbols
+       pretty-code       ; replace bits of code with pretty symbols
        ;;tabs              ; an tab bar for Emacs
        ;;treemacs          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
@@ -66,13 +64,15 @@
        ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       dired             ; making dired pretty [functional]
+
+       (dired             ; making dired pretty [functional]
+        +icons)
        electric          ; smarter, keyword-based electric-indent
        ibuffer           ; interactive buffer management
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
-       ;;eshell            ; a consistent, cross-platform shell (WIP)
+       eshell            ; a consistent, cross-platform shell (WIP)
        ;;shell             ; a terminal REPL for Emacs
        ;;term              ; terminals in Emacs
        ;;vterm             ; another terminals in Emacs
@@ -86,7 +86,7 @@
        ;;ein               ; tame Jupyter notebooks with emacs
        (eval +overlay)     ; run code, run (also, repls)
        flycheck          ; tasing you for every semicolon you forget
-       ;;flyspell          ; tasing you for misspelling mispelling
+       flyspell          ; tasing you for misspelling mispelling
        ;;gist              ; interacting with github gists
        (lookup           ; helps you navigate your code and documentation
         +docsets)        ; ...or in Dash docsets locally

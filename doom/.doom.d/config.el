@@ -30,9 +30,6 @@
 ;; `load-theme' function. These are the defaults.
 (setq doom-theme 'doom-one)
 
-;; If you intend to use org, it is recommended you change this!
-(setq org-directory "~/Documents/notes")
-
 ;; If you want to change the style of line numbers, change this to `relative' or
 ;; `nil' to disable it:
 (setq display-line-numbers-type 'relative)
@@ -55,18 +52,41 @@
 ;; they are implemented.
 
 (custom-set-faces
-  '(org-level-1 ((t (:inherit outline-1 :height 1.15))))
-  '(org-level-2 ((t (:inherit outline-2 :height 1.09))))
-  '(org-level-3 ((t (:inherit outline-3 :height 1.03))))
-  '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
-  '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
-  '(org-document-title ((t (:height 1.2))))
-)
+ '(org-level-1 ((t (:inherit outline-1 :height 1.15))))
+ '(org-level-2 ((t (:inherit outline-2 :height 1.09))))
+ '(org-level-3 ((t (:inherit outline-3 :height 1.03))))
+ ;; '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
+ ;; '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
+ '(org-document-title ((t (:height 1.25))))
+ )
 
 ;; TODO numbers increase/dec
 
 (setq
-  org-ellipsis " ▾ "
-  org-bullets-bullet-list '("·")
-  dired-dwim-target t
-)
+ org-ellipsis " ▾ "
+ org-directory "~/Documents/notes"
+ org-log-done 'time
+ ;; org-todo-keywords '((sequence "TODO(t)" "ACTIVE(a)" "WAIT(w)" "|" "DONE(d)" "CANCELLED(c)"))
+ org-todo-keywords '((sequence "TODO" "DONE"))
+
+ org-capture-templates '(("x" "Note" entry
+
+                          (file+olp+datetree "journal.org")
+                          "**** [ ] %U %?" :prepend t :kill-buffer t)
+                         ("t" "Task" entry
+                          (file+headline "tasks.org" "Inbox")
+                          "* [ ] %?\n%i" :prepend t :kill-buffer t))
+
+ evil-snipe-scope 'buffer
+ ;; org-bullets-bullet-list '("·")
+ dired-dwim-target t
+ )
+
+(set-register ?t (cons 'file "~/Documents/notes/todo.org"))
+(set-register ?c (cons 'file "~/dotfiles/doom/.doom.d/config.el"))
+
+(map!
+ :leader
+ "r r" #'jump-to-register
+ "r j" #'counsel-register
+ )
