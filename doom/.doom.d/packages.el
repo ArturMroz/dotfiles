@@ -57,3 +57,4 @@
 ;; (package! org-fancy-priorities)
 
 ;; (package! deadgrep)
+(package! rg)
