@@ -40,8 +40,10 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 
-(setq doom-theme 'doom-one)
+;; (setq doom-theme 'doom-one)
+;; (setq doom-theme 'doom-gruvbox)
 ;; (setq doom-theme 'doom-opera)
+(setq doom-theme 'doom-tomorrow-night)
 ;; (setq doom-theme 'doom-palenight)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -50,12 +52,10 @@
 (set-register ?c (cons 'file "~/dotfiles/doom/.doom.d/config.el"))
 
 (map! :leader
-      :desc "Capture" "x" #'org-capture
-      ;; "a" #'am-open-agenda
-      :desc "Agenda" "a" (lambda () (interactive) (org-agenda nil "c"))
-      "/" #'rg-menu
+      "x"   #'org-capture
+      "a"   #'am/open-agenda
+      "/"   #'rg-menu
       "f j" #'counsel-file-jump
-      "s a" #'counsel-ag
       "o c" #'quick-calc
       "s g" #'rg-dwim
 
@@ -69,7 +69,7 @@
         :desc "Shorten 'User Story'" "u" (kbd ":s/User SPC Story/US")))
 
 (map! :i
-      "C-v" #'evil-paste-after
+      "C-v" #'evil-paste-before
       "C-k" #'evil-insert-digraph)
 
 (map! :n
@@ -77,21 +77,38 @@
       "C-j" #'evil-window-down
       "C-k" #'evil-window-up
       "C-l" #'evil-window-right
-      "á" #'evil-numbers/inc-at-pt
-      "Á" #'evil-numbers/dec-at-pt)
+      )
+
+(map! :map neotree-mode-map
+      :n "}" #'neotree-select-next-sibling-node
+      :n "{" #'neotree-select-previous-sibling-node
+      )
 
 (setq
- display-line-numbers-type 'visual
+ company-box-doc-enable nil
  dired-dwim-target t
+ display-line-numbers-type 'visual
+ doom-modeline-buffer-file-name-style 'truncate-with-project
+ doom-themes-neotree-file-icons t
  evil-snipe-scope 'buffer
+ magit-ediff-dwim-show-on-hunks t
  neo-window-fixed-size nil
  )
+
+(rg-enable-default-bindings)
+(rg-define-toggle "-uu" "I" nil)
+(setq rg-command-line-flags
+      '("--max-columns=150"
+        ;; "--max-columns-preview"
+        ))
 
 (after! ivy-posframe
   (setq ivy-posframe-display-functions-alist
         '((counsel-git-grep . ivy-display-function-fallback)
           (counsel-grep . ivy-display-function-fallback)
           (counsel-rg . ivy-display-function-fallback)
+          (counsel-describe-variable . ivy-display-function-fallback)
+          (counsel-describe-function . ivy-display-function-fallback)
           (swiper . ivy-display-function-fallback)
           (swiper-isearch . ivy-display-function-fallback)
           ;; (t . +ivy-display-at-frame-center-near-bottom-fn))
@@ -112,7 +129,9 @@
   (setq
    org-ellipsis " » " ; " ▾ "
    org-directory "~/Dropbox/Notes"
-   org-agenda-files '("~/Dropbox/Notes/tasks.org")
+   org-agenda-files '("~/Dropbox/Notes/tasks.org"
+                      "~/Dropbox/Notes/tasks.org"
+                      "~/Dropbox/Notes/exercism.org")
    org-log-done 'time
    ;; org-bullets-bullet-list '("◉" "◎" "○" "✿" "•" )
    ;; org-bullets-bullet-list '("·")
@@ -120,13 +139,13 @@
    org-plain-list-ordered-item-terminator ?.
    org-tags-column -80
 
-   org-todo-keywords '((sequence "TODO(t)" "STRT(s)" "WAIT(w)" "|" "DONE(d)" "KILL(k)"))
+   org-agenda-skip-scheduled-if-done t
+   org-agenda-use-time-grid nil
    org-blank-before-new-entry '((heading) (plain-list-item))
    org-log-done 'time
    org-log-redeadline 'time
    org-log-reschedule 'time
-   org-agenda-use-time-grid nil
-   org-agenda-skip-scheduled-if-done t
+   org-todo-keywords '((sequence "TODO(t)" "STRT(s)" "WAIT(w)" "|" "DONE(d)" "KILL(k)"))
    ;; org-capture-templates
    ;; '(("x" "Note" entry
    ;;    (file+olp+datetree "journal.org")
@@ -158,29 +177,33 @@
       "** %U %?" :prepend t :kill-buffer t)
      ;; tasks
      ("e" "Emacs task" checkitem
-      (file+headline "todo.org" "Emacs stuff")
+      (file+headline "tasks.org" "Emacs stuff")
       "- [ ] %?" :prepend t)
      ("s" "Testing task with clock" entry
       (file+headline "tasks.org" "Backlog")
       "** STRT :t %x :test:" :prepend t :clock-in t :clock-keep t)
-     ("c" "Task with clock" entry
-      (file+headline "todo.org" "Backlog")
-      "** STRT %?" :prepend t :clock-in t :clock-keep t)
-     ("d" "Task for today" entry
-      (file+headline "todo.org" "Backlog")
-      "** TODO %?\n%i SCHEDULED: %t" :prepend t :kill-buffer t)
+     ;; ("c" "Task with clock" entry
+     ;;  (file+headline "tasks.org" "Backlog")
+     ;;  "** STRT %?" :prepend t :clock-in t :clock-keep t)
+     ;; ("d" "Task for today" entry
+     ;;  (file+headline "tasks.org" "Backlog")
+     ;;  "** TODO %?\n%i SCHEDULED: %t" :prepend t :kill-buffer t)
      ("x" "Task" entry
-      (file+headline "todo.org" "Backlog")
+      (file "tasks.org")
       "** TODO %?\n%i" :prepend t :kill-buffer t)
 
-     ("f" "Testing task with clock" entry
-      (file+headline "tasks.org" "Backlog")
-      "** STRT :t %(ar/replace \"%x\") :test: \n heyo %x" :prepend t)
+     ;; ("f" "Testing task with clock" entry
+     ;;  (file+headline "tasks.org" "Backlog")
+     ;;  "** STRT :t %(am/replace \"%x\") :test: \n heyo %x" :prepend t)
 
      )
    ))
 
-(defun ar/replace (mytext)
+(defun am/open-agenda ()
+  (interactive)
+  (org-agenda nil "c"))
+
+(defun am/replace (mytext)
   (s-truncate 70
               (s-replace "User Story" "US"
                          (s-replace-regexp "\\([0-9]\\{4,5\\}\\)"
@@ -210,12 +233,3 @@
 ;;  ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
 ;;  ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
 ;;  ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))
-
-(rg-enable-default-bindings)
-;; (rg-enable-menu)
-
-(setq rg-command-line-flags
-      '("--max-columns=150"
-        ;; "--max-columns-preview"
-        ))
-;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
