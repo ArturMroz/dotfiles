@@ -52,12 +52,17 @@
 (set-register ?c (cons 'file "~/dotfiles/doom/.doom.d/config.el"))
 
 (map! :leader
+      ":"   #'pp-eval-expression
+      ";"   #'counsel-M-x
       "x"   #'org-capture
       "a"   #'am/open-agenda
       "/"   #'rg-menu
+      "b n" #'evil-buffer-new
       "f j" #'counsel-file-jump
+      "i d" #'evil-insert-digraph
       "o c" #'quick-calc
       "s g" #'rg-dwim
+      "s a" #'swiper-all
 
       (:prefix "r"
         "r" #'jump-to-register
@@ -65,18 +70,16 @@
         "n" #'evil-ex-nohighlight
         "c" #'org-update-all-dblocks
 
-        :desc "Create devops link" "l" (kbd ":s/\\d{4,5}/[[devops:&][&]]")
+        ;; :desc "Create devops link" "l" (kbd ":s/\\d{4,5}/[[devops:&][&]]")
         :desc "Shorten 'User Story'" "u" (kbd ":s/User SPC Story/US")))
 
-(map! :i
-      "C-v" #'evil-paste-before
-      "C-k" #'evil-insert-digraph)
+(map! :i "C-v" #'evil-paste-before
+      :i "C-k" #'evil-insert-digraph
 
-(map! :n
-      "C-h" #'evil-window-left
-      "C-j" #'evil-window-down
-      "C-k" #'evil-window-up
-      "C-l" #'evil-window-right
+      :n "C-h" #'evil-window-left
+      :n "C-j" #'evil-window-down
+      :n "C-k" #'evil-window-up
+      :n "C-l" #'evil-window-right
       )
 
 (map! :map neotree-mode-map
@@ -91,6 +94,7 @@
  doom-modeline-buffer-file-name-style 'truncate-with-project
  doom-themes-neotree-file-icons t
  evil-snipe-scope 'buffer
+ doom-scratch-initial-major-mode 'org
  magit-ediff-dwim-show-on-hunks t
  neo-window-fixed-size nil
  )
@@ -102,17 +106,17 @@
         ;; "--max-columns-preview"
         ))
 
-(after! ivy-posframe
-  (setq ivy-posframe-display-functions-alist
-        '((counsel-git-grep . ivy-display-function-fallback)
-          (counsel-grep . ivy-display-function-fallback)
-          (counsel-rg . ivy-display-function-fallback)
-          (counsel-describe-variable . ivy-display-function-fallback)
-          (counsel-describe-function . ivy-display-function-fallback)
-          (swiper . ivy-display-function-fallback)
-          (swiper-isearch . ivy-display-function-fallback)
-          ;; (t . +ivy-display-at-frame-center-near-bottom-fn))
-          (t . ivy-posframe-display-at-frame-center))))
+;; (after! ivy-posframe
+;;   (setq ivy-posframe-display-functions-alist
+;;         '((counsel-git-grep . ivy-display-function-fallback)
+;;           (counsel-grep . ivy-display-function-fallback)
+;;           (counsel-rg . ivy-display-function-fallback)
+;;           (counsel-describe-variable . ivy-display-function-fallback)
+;;           (counsel-describe-function . ivy-display-function-fallback)
+;;           (swiper . ivy-display-function-fallback)
+;;           (swiper-isearch . ivy-display-function-fallback)
+;;           ;; (t . +ivy-display-at-frame-center-near-bottom-fn))
+;;           (t . ivy-posframe-display-at-frame-center))))
 
 (after! org
   (custom-set-faces
@@ -130,7 +134,7 @@
    org-ellipsis " » " ; " ▾ "
    org-directory "~/Dropbox/Notes"
    org-agenda-files '("~/Dropbox/Notes/tasks.org"
-                      "~/Dropbox/Notes/tasks.org"
+                      ;; "~/Dropbox/Notes/tasks.org"
                       "~/Dropbox/Notes/exercism.org")
    org-log-done 'time
    ;; org-bullets-bullet-list '("◉" "◎" "○" "✿" "•" )
@@ -203,12 +207,12 @@
   (interactive)
   (org-agenda nil "c"))
 
-(defun am/replace (mytext)
-  (s-truncate 70
-              (s-replace "User Story" "US"
-                         (s-replace-regexp "\\([0-9]\\{4,5\\}\\)"
-                                           "[[devops:\\1][\\1]]"
-                                           mytext))))
+;; (defun am/replace (mytext)
+;;   (s-truncate 70
+;;               (s-replace "User Story" "US"
+;;                          (s-replace-regexp "\\([0-9]\\{4,5\\}\\)"
+;;                                            "[[devops:\\1][\\1]]"
+;;                                            mytext))))
 
 ;; (("t" "Personal todo" entry
 ;;   (file+headline +org-capture-todo-file "Inbox")
@@ -233,3 +237,22 @@
 ;;  ("ot" "Project todo" entry #'+org-capture-central-project-todo-file "* TODO %?\n %i\n %a" :heading "Tasks" :prepend nil)
 ;;  ("on" "Project notes" entry #'+org-capture-central-project-notes-file "* %U %?\n %i\n %a" :heading "Notes" :prepend t)
 ;;  ("oc" "Project changelog" entry #'+org-capture-central-project-changelog-file "* %U %?\n %i\n %a" :heading "Changelog" :prepend t))
+
+(eval-when-compile
+  (require 'cl))
+
+(defun get-buffers-matching-mode (mode)
+  "Returns a list of buffers where their major-mode is equal to MODE"
+  (let ((buffer-mode-matches '()))
+   (dolist (buf (buffer-list))
+     (with-current-buffer buf
+       (if (eq mode major-mode)
+           (add-to-list 'buffer-mode-matches buf))))
+   buffer-mode-matches))
+
+(defun multi-occur-in-this-mode ()
+  "Show all lines matching REGEXP in buffers with this major mode."
+  (interactive)
+  (multi-occur
+   (get-buffers-matching-mode major-mode)
+   (car (occur-read-primary-args))))
