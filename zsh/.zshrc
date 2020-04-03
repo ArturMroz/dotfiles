@@ -7,8 +7,6 @@ export ZSH="/home/artur/.oh-my-zsh"
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-# ZSH_THEME="agnoster"
 # ZSH_THEME="awesomepanda"
 ZSH_THEME="dracula"
 
@@ -32,7 +30,7 @@ DEFAULT_USER="artur"
 # DISABLE_AUTO_UPDATE="true"
 
 # Uncomment the following line to change how often to auto-update (in days).
-export UPDATE_ZSH_DAYS=13
+export UPDATE_ZSH_DAYS=14
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -71,19 +69,23 @@ plugins=(
   # trash
   z
   debian
-  # command-not-found
   zsh-autosuggestions
   zsh-syntax-highlighting
-  # zsh-wakatime
 )
 
+# USER CONFIGURATION
 
+# export MANPATH="/usr/local/man:$MANPATH"
 
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
 
-# export PATH=$PATH:/opt/node/bin
-# export PATH=$PATH:/opt/firefox
-# wal -R -e -q  # -n -v
-# xset b off
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
+
 
 export MSBuildSDKsPath=/usr/share/dotnet/sdk/$(dotnet --version)/Sdks/
 # export MSBuildSDKsPath=usr/share/dotnet/sdk/2.2.203/Sdks
@@ -98,38 +100,18 @@ export PATH=$PATH:~/.dotnet/tools
 export PATH=$PATH:~/scripts
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
+# turn the bell off
 xset b off
 
+# caps lock behaving as ctrl
 setxkbmap -option ctrl:nocaps
 
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
+# wal -R -e -q  # -n -v
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-#
+
 alias zshconfig="vim ~/.zshrc"
 alias srcz="source ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"
@@ -148,8 +130,6 @@ alias mrs='mogrify -resize 1000 -sharpen 0x1'
 alias fd=fdfind
 
 alias vim=~/Downloads/appimages/nvim.appimage
-
-# alias fd='cd "$(z | sort -nr | awk '{print $2}' | fzf +s)"'
 
 # export EDITOR=/usr/bin/vim
 export EDITOR=~/Downloads/appimages/nvim.appimage
