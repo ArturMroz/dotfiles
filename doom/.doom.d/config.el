@@ -1,7 +1,5 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; These are used for a number of things, particularly for GPG configuration,
-;; some email clients, file templates and snippets.
 (setq user-full-name "John Doe"
       user-mail-address "john@doe.com")
 
@@ -15,9 +13,8 @@
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
 (setq doom-font (font-spec :family "Fira Code" :size 17)
-      doom-variable-pitch-font (font-spec :family "sans"))
+      doom-variable-pitch-font (font-spec :family "sans" :size 12))
 ;; (setq doom-font (font-spec :family "Hack Regular Nerd Font Complete Mono" :size 16)
-;; (setq doom-font (font-spec :family "monospace" :size 16)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -26,7 +23,6 @@
 ;; - `after!' for running code after a package has loaded
 ;; - `add-load-path!' for adding directories to the `load-path', where Emacs
 ;;   looks when you load packages with `require' or `use-package'.
-;; - `map!' for binding new keys
 
 (setq doom-theme 'doom-gruvbox)
 
@@ -68,21 +64,22 @@
       :n "}" #'neotree-select-next-sibling-node
       :n "{" #'neotree-select-previous-sibling-node
       )
-
 (setq
  company-box-doc-enable nil
  dired-dwim-target t
  display-line-numbers-type 'visual
  doom-modeline-buffer-file-name-style 'truncate-with-project
+ doom-scratch-initial-major-mode 'org
  doom-themes-neotree-file-icons t
  evil-snipe-scope 'buffer
- doom-scratch-initial-major-mode 'org
  magit-ediff-dwim-show-on-hunks t
  neo-window-fixed-size nil
  )
 
 (rg-enable-default-bindings)
+
 (rg-define-toggle "-uu" "I" nil)
+
 (setq rg-command-line-flags
       '("--max-columns=150"
         ;; "--max-columns-preview"
@@ -97,12 +94,12 @@
    )
 
   (setq
-   org-ellipsis " » "
    org-directory "~/Dropbox/Notes"
    org-agenda-files '("~/Dropbox/Notes/tasks.org"
                       ;; "~/Dropbox/Notes/tasks.org"
                       "~/Dropbox/Notes/exercism.org")
    org-log-done 'time
+   org-ellipsis " » "
    ;; org-bullets-bullet-list '("◉" "◎" "○" "✿" "•" )
    org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("1." . "-"))
    org-plain-list-ordered-item-terminator ?.
@@ -112,8 +109,6 @@
    org-agenda-use-time-grid nil
    org-blank-before-new-entry '((heading) (plain-list-item))
    org-log-done 'time
-   org-log-redeadline 'time
-   org-log-reschedule 'time
    org-todo-keywords '((sequence "TODO(t)" "STRT(s)" "WAIT(w)" "|" "DONE(d)" "KILL(k)"))
 
    org-agenda-custom-commands
@@ -143,9 +138,6 @@
      ("s" "Testing task with clock" entry
       (file+headline "tasks.org" "Backlog")
       "** STRT :t %x :test:" :prepend t :clock-in t :clock-keep t)
-     ;; '(("x" "Note" entry
-     ;;    (file+olp+datetree "journal.org")
-     ;;    "**** [ ] %U %?" :prepend t :kill-buffer t)
      ("x" "Task" entry
       (file "tasks.org")
       "** TODO %?\n%i" :prepend t :kill-buffer t)
