@@ -1,27 +1,12 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
-;; This is where you install packages, by declaring them with the `package!'
-;; macro, then running 'doom refresh' on the command line. You'll need to
-;; restart Emacs for your changes to take effect! Or at least, run M-x
-;; `doom/reload'.
-;;
-;; WARNING: Don't disable core packages listed in ~/.emacs.d/core/packages.el.
-;; Doom requires these, and disabling them may have terrible side effects.
-;;
-;; Here are a couple examples:
-
-
-;; All of Doom's packages are pnned to a specific commit, and updated from
+;; All of Doom's packages are pinned to a specific commit, and updated from
 ;; release to release. To un-pin all packages and live on the edge, do:
 ;(setq doom-pinned-packages nil)
 
 ;; ...but to unpin a single package:
 ;(package! pinned-package :pin nil)
-
-
-;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
-;(package! some-package)
 
 ;; To install a package directly from a particular repo, you'll need to specify
 ;; a `:recipe'. You'll find documentation on what `:recipe' accepts here:
@@ -51,10 +36,4 @@
 ;; our package manager can't deal with; see raxod502/straight.el#279)
 ;(package! builtin-package :recipe (:branch "develop"))
 
-
-
-;; (package! evil-numbers)
-;; (package! org-fancy-priorities)
-
-;; (package! deadgrep)
 (package! rg)

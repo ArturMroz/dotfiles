@@ -13,7 +13,7 @@
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
 (setq doom-font (font-spec :family "Fira Code" :size 17)
-      doom-variable-pitch-font (font-spec :family "sans" :size 12))
+      doom-variable-pitch-font (font-spec :family "sans" :size 14))
 ;; (setq doom-font (font-spec :family "Hack Regular Nerd Font Complete Mono" :size 16)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
@@ -47,9 +47,7 @@
       "r r" #'jump-to-register
       "r n" #'evil-ex-nohighlight
       "r c" #'org-update-all-dblocks
-
-      ;; :desc "Create devops link" "l" (kbd ":s/\\d{4,5}/[[devops:&][&]]")
-      :desc "Shorten 'User Story'" "r u" (kbd ":s/User SPC Story/US"))
+      )
 
 (map! :i "C-v" #'evil-paste-before
       :i "C-k" #'evil-insert-digraph
@@ -64,6 +62,7 @@
       :n "}" #'neotree-select-next-sibling-node
       :n "{" #'neotree-select-previous-sibling-node
       )
+
 (setq
  company-box-doc-enable nil
  dired-dwim-target t
@@ -74,16 +73,11 @@
  evil-snipe-scope 'buffer
  magit-ediff-dwim-show-on-hunks t
  neo-window-fixed-size nil
+ rg-command-line-flags '("--max-columns=150")
  )
 
 (rg-enable-default-bindings)
-
 (rg-define-toggle "-uu" "I" nil)
-
-(setq rg-command-line-flags
-      '("--max-columns=150"
-        ;; "--max-columns-preview"
-        ))
 
 (after! org
   (custom-set-faces
@@ -135,12 +129,12 @@
      ("e" "Emacs task" checkitem
       (file+headline "tasks.org" "Emacs stuff")
       "- [ ] %?" :prepend t)
-     ("s" "Testing task with clock" entry
-      (file+headline "tasks.org" "Backlog")
-      "** STRT :t %x :test:" :prepend t :clock-in t :clock-keep t)
      ("x" "Task" entry
       (file "tasks.org")
       "** TODO %?\n%i" :prepend t :kill-buffer t)
+     ("c" "Task with clock" entry
+      (file+headline "tasks.org" "Backlog")
+      "** STRT %?" :prepend t :clock-in t :clock-keep t)
      )))
 
 (defun am/open-agenda ()
