@@ -73,6 +73,7 @@
  evil-snipe-scope 'buffer
  magit-ediff-dwim-show-on-hunks t
  neo-window-fixed-size nil
+ rainbow-delimiters-max-face-count 6
  rg-command-line-flags '("--max-columns=150")
  )
 

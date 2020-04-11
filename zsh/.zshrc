@@ -39,7 +39,7 @@ export UPDATE_ZSH_DAYS=14
 # DISABLE_AUTO_TITLE="true"
 
 # Uncomment the following line to enable command auto-correction.
-ENABLE_CORRECTION="true"
+# ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 # COMPLETION_WAITING_DOTS="true"
@@ -64,11 +64,10 @@ ENABLE_CORRECTION="true"
 # Add wisely, as too many plugins slow down shell startup.
 
 plugins=(
-  git
-  extract
-  # trash
-  z
   debian
+  extract
+  git
+  z
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -87,9 +86,7 @@ plugins=(
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 
-export MSBuildSDKsPath=/usr/share/dotnet/sdk/$(dotnet --version)/Sdks/
-# export MSBuildSDKsPath=usr/share/dotnet/sdk/2.2.203/Sdks
-export PATH=$MSBuildSDKsPath:$PATH
+# EXPORTS --------------------
 
 export PATH="$HOME/.cargo/bin:$PATH"
 export PATH=$PATH:/opt/node/bin
@@ -98,15 +95,21 @@ export PATH=$PATH:/opt/firefox
 export PATH=$PATH:/opt/mssql-tools/bin/
 export PATH=$PATH:~/.dotnet/tools
 export PATH=$PATH:~/scripts
+
+export MSBuildSDKsPath=/usr/share/dotnet/sdk/$(dotnet --version)/Sdks/
+export PATH=$MSBuildSDKsPath:$PATH
+
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
-# turn the bell off
-xset b off
+export EDITOR=~/Downloads/appimages/nvim.appimage
 
-# caps lock behaving as ctrl
-setxkbmap -option ctrl:nocaps
+export LC_ALL="en_GB.UTF-8"
+# export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --exclude .git'
+export FZF_DEFAULT_COMMAND='fdfind --type f'
+export FZF_TMUX=1
 
-# wal -R -e -q  # -n -v
+
+# ALIASES --------------------
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -115,7 +118,6 @@ setxkbmap -option ctrl:nocaps
 alias zshconfig="vim ~/.zshrc"
 alias srcz="source ~/.zshrc"
 alias ohmyzsh="vim ~/.oh-my-zsh"
-# alias upd="sudo apt update && sudo apt upgrade" 
 
 alias praca="firefox & skypeforlinux & teamviewer & spotify & code &"
 alias perform="sudo cpufreq-set -r -g performance"
@@ -131,19 +133,8 @@ alias fd=fdfind
 
 alias vim=~/Downloads/appimages/nvim.appimage
 
-# export EDITOR=/usr/bin/vim
-export EDITOR=~/Downloads/appimages/nvim.appimage
 
-export LC_ALL="en_GB.UTF-8"
-source $ZSH/oh-my-zsh.sh
-
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-# export FZF_DEFAULT_COMMAND='ag --hidden --ignore .git -g ""'
-# export FZF_DEFAULT_COMMAND='fdfind --type f --hidden --exclude .git'
-export FZF_DEFAULT_COMMAND='fdfind --type f'
-export FZF_TMUX=1
-
+# FUNCTIONS --------------------
 
 _fzf_compgen_path() {
   fd --hidden --follow --exclude ".git" . "$1"
@@ -153,13 +144,13 @@ _fzf_compgen_path() {
 _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
- # Use fd and fzf to get the args to a command.
- # Examples:
- # f mv # To move files. You can write the destination after selecting the files.
- # f 'echo Selected:'
- # f 'echo Selected music:' --extention mp3
- # fm rm # To rm files in current directory
- f() {
+
+# Use fd and fzf to get the args to a command.
+# Examples:
+# f mv # To move files. You can write the destination after selecting the files.
+# f 'echo Selected music:' --extention mp3
+# fm rm # To rm files in current directory
+f() {
   sels=( "${(@f)$(fd "${fd_default[@]}" "${@:2}"| fzf)}" )
   test -n "$sels" && print -z -- "$1 ${sels[@]:q:q}"
 }
@@ -178,7 +169,19 @@ zz() {
   cd "$(_z -l 2>&1 | sed 's/^[0-9,.]* *//' | fzf -q "$_last_z_args")"
 }
 
-alias j=z
-alias jj=zz
+
+# MISC --------------------
 
 fortune -a
+
+source $ZSH/oh-my-zsh.sh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# turn the bell off
+xset b off
+
+# caps lock behaving as ctrl
+setxkbmap -option ctrl:nocaps
+
+# wal -R -e -q  # -n -v
