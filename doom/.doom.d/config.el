@@ -1,53 +1,71 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+;; SETQS ----------------------------------
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
-;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'
-;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-(setq doom-font (font-spec :family "Fira Code" :size 17)
-      doom-variable-pitch-font (font-spec :family "sans" :size 14))
-;; (setq doom-font (font-spec :family "Hack Regular Nerd Font Complete Mono" :size 16)
+(setq
+ user-full-name "John Doe"
+ user-mail-address "john@doe.com"
 
-;; Here are some additional functions/macros that could help you configure Doom:
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', where Emacs
-;;   looks when you load packages with `require' or `use-package'.
+ doom-font (font-spec :family "Fira Code" :size 17)
+ doom-variable-pitch-font (font-spec :family "sans" :size 14)
+ doom-modeline-buffer-file-name-style 'truncate-with-project
+ doom-scratch-initial-major-mode 'org
+ doom-themes-neotree-file-icons t
+ doom-theme 'doom-gruvbox
 
-(setq doom-theme 'doom-gruvbox)
+ company-box-doc-enable nil
+ dired-dwim-target t
+ display-line-numbers-type 'visual
+ evil-snipe-scope 'buffer
+ magit-ediff-dwim-show-on-hunks t
+ neo-window-fixed-size nil
+ org-pomodoro-format "%s"
+ rainbow-delimiters-max-face-count 6
+ rg-command-line-flags '("--max-columns=150")
+ scroll-preserve-screen-position nil ; Avoid jump when search
+ show-trailing-whitespace t
+
+ httpd-root "/home/artur/Documents/code/little-bits"
+ )
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (set-register ?t (cons 'file "~/Dropbox/Notes/tasks.org"))
 (set-register ?c (cons 'file "~/dotfiles/doom/.doom.d/config.el"))
 
+(set-popup-rule! "^\\*rg\\*" :side 'bottom :size 1.00 :select t :ttl nil)
+
+
+;; MAPS -----------------------------------
+
 (map! :leader
-      ";"   #'counsel-M-x
-      ":"   #'pp-eval-expression
-      "x"   #'org-capture
-      "a"   #'am/open-agenda
       "/"   #'rg-menu
+      ":"   #'pp-eval-expression
+      ";"   #'counsel-M-x
+      "a"   #'am/open-agenda
+      "k" #'am/select-clock
+      "x"   #'org-capture
 
       "b n" #'evil-buffer-new
       "f j" #'counsel-file-jump
+      "g b" #'dumb-jump-go
       "i d" #'evil-insert-digraph
+      "o =" #'ranger
       "o c" #'quick-calc
       "s g" #'rg-dwim
       "s a" #'swiper-all
-      "r r" #'jump-to-register
-      "r n" #'evil-ex-nohighlight
-      "r c" #'org-update-all-dblocks
-      )
+      "w <up>" #'am/fibonacci-resize
+
+      (:prefix ("r" . "my stuff")
+        "c" #'org-update-all-dblocks
+        "d" #'org-clock-display
+        "n" #'evil-ex-nohighlight
+        "r" #'jump-to-register
+        "k" #'am/update-cookies
+
+        ;; :desc "Update cookies"
+        ;; "k" (lambda () (interactive) (org-update-statistics-cookies t))
+        ))
 
 (map! :i "C-v" #'evil-paste-before
       :i "C-k" #'evil-insert-digraph
@@ -63,22 +81,53 @@
       :n "{" #'neotree-select-previous-sibling-node
       )
 
-(setq
- company-box-doc-enable nil
- dired-dwim-target t
- display-line-numbers-type 'visual
- doom-modeline-buffer-file-name-style 'truncate-with-project
- doom-scratch-initial-major-mode 'org
- doom-themes-neotree-file-icons t
- evil-snipe-scope 'buffer
- magit-ediff-dwim-show-on-hunks t
- neo-window-fixed-size nil
- rainbow-delimiters-max-face-count 6
- rg-command-line-flags '("--max-columns=150")
- )
+
+;; FUNCTIONS ------------------------------
+
+(defun am/update-cookies ()
+  (interactive)
+  (org-update-statistics-cookies t))
+
+(defun am/print-file-name ()
+  (interactive)
+  (message (buffer-file-name)))
+
+(defun am/open-agenda ()
+  (interactive)
+  (org-agenda nil "c"))
+
+(defun am/select-clock ()
+  (interactive)
+  (org-clock-select-task))
+
+(defun am/fibonacci-resize ()
+  (interactive)
+  (enlarge-window-horizontally (round (* 0.33 (window-total-width)))))
+
+(defun am/set-httpd-root-to-curr-dir ()
+  (interactive)
+  (let ((curr-dir (file-name-directory buffer-file-name)))
+    (setq httpd-root curr-dir)
+    (message (format "Httpd root set to: %s" curr-dir))))
+
+
+;; HOOKS
+
+(add-hook 'html-mode-hook 'skewer-html-mode)
+
+(with-eval-after-load 'outline
+  (add-hook 'ediff-prepare-buffer-hook #'org-show-all))
+
+;; (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2)))
+
+
+;; PACKAGES -------------------------------
 
 (rg-enable-default-bindings)
 (rg-define-toggle "-uu" "I" nil)
+
+(after! web-mode
+  (setq web-mode-markup-indent-offset 2))
 
 (after! org
   (custom-set-faces
@@ -105,6 +154,7 @@
    org-blank-before-new-entry '((heading) (plain-list-item))
    org-log-done 'time
    org-todo-keywords '((sequence "TODO(t)" "STRT(s)" "WAIT(w)" "|" "DONE(d)" "KILL(k)"))
+   org-reverse-note-order t
 
    org-agenda-custom-commands
    '(("c" "Agenda and TODOs"
@@ -133,11 +183,33 @@
      ("x" "Task" entry
       (file "tasks.org")
       "** TODO %?\n%i" :prepend t :kill-buffer t)
+     ("d" "Task for today" entry
+      (file "tasks.org")
+      "** TODO %?\nSCHEDULED: %u%i" :prepend t :kill-buffer t)
      ("c" "Task with clock" entry
       (file+headline "tasks.org" "Backlog")
       "** STRT %?" :prepend t :clock-in t :clock-keep t)
      )))
 
-(defun am/open-agenda ()
-  (interactive)
-  (org-agenda nil "c"))
+
+;; MISC -----------------------------------
+
+;; Additional functions/macros that could help you configure Doom:
+;;
+;; - `load!' for loading external *.el files relative to this one
+;; - `use-package' for configuring packages
+;; - `after!' for running code after a package has loaded
+;; - `add-load-path!' for adding directories to the `load-path', where Emacs
+;;   looks when you load packages with `require' or `use-package'.
+
+;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
+;; are the three important ones:
+;;
+;; + `doom-font'
+;; + `doom-variable-pitch-font'
+;; + `doom-big-font' -- used for `doom-big-font-mode'
+;;
+;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
+;; font string. You generally only need these two:
+;; (font-spec :family "Hack NF" :size 15))
+;; (font-spec :family "Roboto Mono" :size 15))
