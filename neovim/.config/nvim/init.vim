@@ -1,6 +1,5 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
-Plug 'ludovicchabant/vim-gutentags'
 " Plug 'liuchengxu/vista.vim'
 
 Plug 'airblade/vim-rooter'
@@ -10,12 +9,12 @@ Plug 'mhinz/vim-startify'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'vim-scripts/ReplaceWithRegister'
+" Plug 'vim-scripts/ReplaceWithRegister'
 
 Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-unimpaired'
 Plug 'unblevable/quick-scope'
-Plug 'easymotion/vim-easymotion'
+" Plug 'easymotion/vim-easymotion'
 
 Plug 'takac/vim-hardtime'
 Plug 'wellle/targets.vim'
@@ -37,29 +36,23 @@ Plug 'junegunn/fzf.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-Plug 'HerringtonDarkholme/yats.vim'
+" Plug 'HerringtonDarkholme/yats.vim'
 Plug 'prurigro/vim-polyglot-darkcloud'
 
+Plug 'ludovicchabant/vim-gutentags'
+
 " Plug 'arcticicestudio/nord-vim'
-Plug 'gruvbox-community/gruvbox'
+" Plug 'gruvbox-community/gruvbox'
 Plug 'sainnhe/gruvbox-material'
 
-Plug 'jceb/vim-orgmode'
+" Plug 'jceb/vim-orgmode'
 
 call plug#end()
 
-" let g:gruvbox_material_background = 'medium'
+
+" SETS --------------------
 
 colorscheme gruvbox-material
-
-" let g:gruvbox_italic = 1
-" colorscheme gruvbox
-
-" let g:nord_uniform_diff_background = 1
-" let g:nord_italic = 1
-" let g:nord_italic_comments = 1
-" let g:nord_comment_brightness = 1
-" colorscheme nord
 
 set hidden
 set number relativenumber
@@ -79,6 +72,20 @@ set encoding=UTF-8
 set background=dark
 
 set updatetime=300
+
+if exists('$TMUX')
+    " Colors in tmux
+    let &t_8f = "<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "<Esc>[48;2;%lu;%lu;%lum"
+endif
+
+" hi Normal guibg=NONE ctermbg=NONE
+" hi LineNr guibg=NONE ctermbg=NONE
+" hi CursorLineNr guibg=dark ctermbg=NONE
+" hi SignColumn guibg=NONE
+
+
+" MAPS --------------------
 
 let mapleader=" "
 
@@ -129,17 +136,6 @@ nnoremap <silent> <Leader>- :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
 
 nnoremap <silent> <Leader><Up> :exe "resize " . (winheight(0) * 3/2)<CR>
 nnoremap <silent> <Leader><Down> :exe "resize " . (winheight(0) * 2/3)<CR>
-
-if exists('$TMUX')
-    " Colors in tmux
-    let &t_8f = "<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "<Esc>[48;2;%lu;%lu;%lum"
-endif
-
-" hi Normal guibg=NONE ctermbg=NONE
-" hi LineNr guibg=NONE ctermbg=NONE
-" hi CursorLineNr guibg=dark ctermbg=NONE
-" hi SignColumn guibg=NONE
 
 
 " ---------- PLUGINS ----------
