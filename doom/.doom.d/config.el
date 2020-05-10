@@ -17,6 +17,8 @@
  dired-dwim-target t
  display-line-numbers-type 'visual
  evil-snipe-scope 'buffer
+ flycheck-jshintrc "~/.emacs.d/.jshintrc"
+ httpd-root "/home/artur/Documents/code/little-bits"
  magit-ediff-dwim-show-on-hunks t
  neo-window-fixed-size nil
  org-pomodoro-format "%s"
@@ -24,8 +26,6 @@
  rg-command-line-flags '("--max-columns=150")
  scroll-preserve-screen-position nil ; Avoid jump when search
  show-trailing-whitespace t
-
- httpd-root "/home/artur/Documents/code/little-bits"
  )
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
@@ -43,7 +43,7 @@
       ":"   #'pp-eval-expression
       ";"   #'counsel-M-x
       "a"   #'am/open-agenda
-      "k" #'am/select-clock
+      "k"   #'am/select-clock
       "x"   #'org-capture
 
       "b n" #'evil-buffer-new
@@ -57,15 +57,17 @@
       "w <up>" #'am/fibonacci-resize
 
       (:prefix ("r" . "my stuff")
-        "c" #'org-update-all-dblocks
-        "d" #'org-clock-display
-        "n" #'evil-ex-nohighlight
-        "r" #'jump-to-register
-        "k" #'am/update-cookies
+       "c" #'org-update-all-dblocks
+       "d" #'org-clock-display
+       "j" #'am/toggle-narrow-js2
+       "J" #'am/widen-to-web-mode
+       "n" #'evil-ex-nohighlight
+       "r" #'jump-to-register
+       "k" #'am/update-cookies
 
-        ;; :desc "Update cookies"
-        ;; "k" (lambda () (interactive) (org-update-statistics-cookies t))
-        ))
+       ;; :desc "Update cookies"
+       ;; "k" (lambda () (interactive) (org-update-statistics-cookies t))
+       ))
 
 (map! :i "C-v" #'evil-paste-before
       :i "C-k" #'evil-insert-digraph
@@ -109,6 +111,20 @@
   (let ((curr-dir (file-name-directory buffer-file-name)))
     (setq httpd-root curr-dir)
     (message (format "Httpd root set to: %s" curr-dir))))
+
+(defun am/toggle-narrow-js2 ()
+  (interactive)
+  (if (buffer-narrowed-p)
+      (progn
+        (widen)
+        (web-mode))
+    (execute-kbd-macro (kbd "znit"))
+    (js2-mode)))
+
+(defun am/widen-to-web-mode ()
+  (interactive)
+  (doom/widen-indirectly-narrowed-buffer)
+  (web-mode))
 
 
 ;; HOOKS
