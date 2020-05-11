@@ -1,11 +1,7 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
-;; All of Doom's packages are pinned to a specific commit, and updated from
-;; release to release. To un-pin all packages and live on the edge, do:
-;(setq doom-pinned-packages nil)
-
-;; ...but to unpin a single package:
+;; to unpin a single package:
 ;(package! pinned-package :pin nil)
 
 ;; To install a package directly from a particular repo, you'll need to specify

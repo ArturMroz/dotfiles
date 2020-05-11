@@ -9,20 +9,20 @@
  doom-font (font-spec :family "Fira Code" :size 17)
  doom-variable-pitch-font (font-spec :family "sans" :size 14)
  doom-modeline-buffer-file-name-style 'truncate-with-project
- doom-scratch-initial-major-mode 'org
+ ;; doom-scratch-initial-major-mode 'org
  doom-themes-neotree-file-icons t
  doom-theme 'doom-gruvbox
 
- company-box-doc-enable nil
+ ;; company-box-doc-enable nil
  dired-dwim-target t
  display-line-numbers-type 'visual
  evil-snipe-scope 'buffer
  flycheck-jshintrc "~/.emacs.d/.jshintrc"
- httpd-root "/home/artur/Documents/code/little-bits"
+ httpd-root "~/Documents/code/little-bits"
  magit-ediff-dwim-show-on-hunks t
- neo-window-fixed-size nil
- org-pomodoro-format "%s"
- rainbow-delimiters-max-face-count 6
+ ;; neo-window-fixed-size nil
+ ;; org-pomodoro-format "%s"
+ ;; rainbow-delimiters-max-face-count 6
  rg-command-line-flags '("--max-columns=150")
  scroll-preserve-screen-position nil ; Avoid jump when search
  show-trailing-whitespace t
@@ -39,12 +39,12 @@
 ;; MAPS -----------------------------------
 
 (map! :leader
-      "/"   #'rg-menu
-      ":"   #'pp-eval-expression
-      ";"   #'counsel-M-x
-      "a"   #'am/open-agenda
-      "k"   #'am/select-clock
-      "x"   #'org-capture
+      "/" #'rg-menu
+      ":" #'pp-eval-expression
+      ";" #'counsel-M-x
+      "a" #'am/open-agenda
+      "k" #'am/select-clock
+      "x" #'org-capture
 
       "b n" #'evil-buffer-new
       "f j" #'counsel-file-jump
@@ -63,11 +63,7 @@
        "J" #'am/widen-to-web-mode
        "n" #'evil-ex-nohighlight
        "r" #'jump-to-register
-       "k" #'am/update-cookies
-
-       ;; :desc "Update cookies"
-       ;; "k" (lambda () (interactive) (org-update-statistics-cookies t))
-       ))
+       "k" #'am/update-cookies))
 
 (map! :i "C-v" #'evil-paste-before
       :i "C-k" #'evil-insert-digraph
@@ -75,13 +71,11 @@
       :n "C-h" #'evil-window-left
       :n "C-j" #'evil-window-down
       :n "C-k" #'evil-window-up
-      :n "C-l" #'evil-window-right
-      )
+      :n "C-l" #'evil-window-right)
 
 (map! :map neotree-mode-map
       :n "}" #'neotree-select-next-sibling-node
-      :n "{" #'neotree-select-previous-sibling-node
-      )
+      :n "{" #'neotree-select-previous-sibling-node)
 
 
 ;; FUNCTIONS ------------------------------
@@ -129,10 +123,10 @@
 
 ;; HOOKS
 
-(add-hook 'html-mode-hook 'skewer-html-mode)
+;; (add-hook 'html-mode-hook 'skewer-html-mode)
 
-(with-eval-after-load 'outline
-  (add-hook 'ediff-prepare-buffer-hook #'org-show-all))
+;; (with-eval-after-load 'outline
+;;   (add-hook 'ediff-prepare-buffer-hook #'org-show-all))
 
 ;; (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2)))
 
@@ -150,24 +144,20 @@
    '(org-level-1 ((t (:inherit outline-1 :height 1.09))))
    '(org-level-2 ((t (:inherit outline-2 :height 1.06))))
    '(org-level-3 ((t (:inherit outline-3 :height 1.03))))
-   '(org-document-title ((t (:height 1.25))))
-   )
+   '(org-document-title ((t (:height 1.25)))))
 
   (setq
    org-directory "~/Dropbox/Notes"
    org-agenda-files '("~/Dropbox/Notes/tasks.org"
-                      ;; "~/Dropbox/Notes/tasks.org"
                       "~/Dropbox/Notes/exercism.org")
-   org-log-done 'time
    org-ellipsis " » "
-   ;; org-bullets-bullet-list '("◉" "◎" "○" "✿" "•" )
    org-list-demote-modify-bullet '(("+" . "-") ("-" . "+") ("1." . "-"))
    org-plain-list-ordered-item-terminator ?.
    org-tags-column -80
 
    org-agenda-skip-scheduled-if-done t
    org-agenda-use-time-grid nil
-   org-blank-before-new-entry '((heading) (plain-list-item))
+   ;; org-blank-before-new-entry '((heading) (plain-list-item))
    org-log-done 'time
    org-todo-keywords '((sequence "TODO(t)" "STRT(s)" "WAIT(w)" "|" "DONE(d)" "KILL(k)"))
    org-reverse-note-order t
@@ -186,16 +176,9 @@
             category-keep)))))))
 
    org-capture-templates
-   '(("j" "Journal" entry
-      (file+olp+datetree "journal.org")
-      "**** [ ] %U %?" :prepend t :kill-buffer t)
-     ("n" "Note" entry
+   '(("n" "Note" entry
       (file+headline "notebook.org" "Inbox")
       "** %U %?" :prepend t :kill-buffer t)
-     ;; tasks
-     ("e" "Emacs task" checkitem
-      (file+headline "tasks.org" "Emacs stuff")
-      "- [ ] %?" :prepend t)
      ("x" "Task" entry
       (file "tasks.org")
       "** TODO %?\n%i" :prepend t :kill-buffer t)
@@ -205,7 +188,9 @@
      ("c" "Task with clock" entry
       (file+headline "tasks.org" "Backlog")
       "** STRT %?" :prepend t :clock-in t :clock-keep t)
-     )))
+     ("e" "Emacs task" checkitem
+      (file+headline "tasks.org" "Emacs stuff")
+      "- [ ] %?" :prepend t))))
 
 
 ;; MISC -----------------------------------
