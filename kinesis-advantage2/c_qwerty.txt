@@ -1,12 +1,25 @@
-[caps]>[lctrl]
+* [caps]>[bspace]
 [up]>[down]
 [down]>[up]
 [pup]>[lalt]
 [pdown]>[rwin]
-[delete]>[escape]
+
+[delete]>[escape][t&h200][lshift]
+[enter]>[enter][t&h200][lshift]
+
+* [delete]>[escape][t&h200][kpshift]
+* [kp-delete]>[escape][t&h200][kpshift]
+
+* [delete]>[kpshift]
+* [kp-delete]>[kpshift]
+
+* [delete]>[escape]
+
+*** Colemak-DHm
 
 [T]>[B]
 [B]>[V]
+[V]>[D]
 [R]>[P]
 [E]>[F]
 [F]>[T]
@@ -21,8 +34,6 @@
 [K]>[E]
 [L]>[I]
 [;]>[O]
-[H]>[K]
+[H]>[M]
 [M]>[H]
-[N]>[M]
-
-[V]>[D]
+[N]>[K]
