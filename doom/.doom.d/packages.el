@@ -33,3 +33,5 @@
 ;(package! builtin-package :recipe (:branch "develop"))
 
 (package! rg)
+
+(package! evil-escape :disable t)

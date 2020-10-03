@@ -4,6 +4,7 @@
 
        :completion
        (company           ; the ultimate code completion backend
+        ;; +tng
         ;; +childframe
         )
 

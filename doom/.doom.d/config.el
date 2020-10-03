@@ -1,12 +1,14 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; SETQS ----------------------------------
+;; SETS ----------------------------------
+
 
 (setq
  user-full-name "John Doe"
  user-mail-address "john@doe.com"
 
- doom-font (font-spec :family "Fira Code" :size 17)
+ ;; doom-font (font-spec :family "Fira Code" :size 17)
+ doom-font (font-spec :family "Iosevka" :size 18)
  doom-variable-pitch-font (font-spec :family "sans" :size 14)
  doom-modeline-buffer-file-name-style 'truncate-with-project
  ;; doom-scratch-initial-major-mode 'org
@@ -18,15 +20,14 @@
  display-line-numbers-type 'visual
  evil-snipe-scope 'buffer
  flycheck-jshintrc "~/.emacs.d/.jshintrc"
- httpd-root "~/Documents/code/little-bits"
+ httpd-root "~/Documents/code/little-bits/snek"
  magit-ediff-dwim-show-on-hunks t
  ;; neo-window-fixed-size nil
  ;; org-pomodoro-format "%s"
  ;; rainbow-delimiters-max-face-count 6
  rg-command-line-flags '("--max-columns=150")
  scroll-preserve-screen-position nil ; Avoid jump when search
- show-trailing-whitespace t
- )
+ show-trailing-whitespace t)
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -129,6 +130,16 @@
 ;;   (add-hook 'ediff-prepare-buffer-hook #'org-show-all))
 
 ;; (add-hook 'js2-mode-hook (lambda () (setq js2-basic-offset 2)))
+
+(advice-add #'load-theme :after
+            (lambda (&rest _)
+              (set-face-italic 'font-lock-comment-face t)))
+
+(add-hook 'js2-mode-hook
+          (defun my-js2-mode-setup ()
+            (flycheck-mode t)
+            (when (executable-find "eslint")
+              (flycheck-select-checker 'javascript-eslint))))
 
 
 ;; PACKAGES -------------------------------
