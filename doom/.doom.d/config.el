@@ -1,6 +1,6 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; SETS ----------------------------------
+;; MAIN SETS ----------------------------------
 
 
 (setq
@@ -11,23 +11,18 @@
  doom-font (font-spec :family "Iosevka" :size 18)
  doom-variable-pitch-font (font-spec :family "sans" :size 14)
  doom-modeline-buffer-file-name-style 'truncate-with-project
- ;; doom-scratch-initial-major-mode 'org
  doom-themes-neotree-file-icons t
  doom-theme 'doom-gruvbox
-
- ;; company-box-doc-enable nil
- dired-dwim-target t
  display-line-numbers-type 'visual
+
  evil-snipe-scope 'buffer
  flycheck-jshintrc "~/.emacs.d/.jshintrc"
  httpd-root "~/Documents/code/little-bits/snek"
  magit-ediff-dwim-show-on-hunks t
- ;; neo-window-fixed-size nil
- ;; org-pomodoro-format "%s"
- ;; rainbow-delimiters-max-face-count 6
  rg-command-line-flags '("--max-columns=150")
- scroll-preserve-screen-position nil ; Avoid jump when search
- show-trailing-whitespace t)
+ scroll-preserve-screen-position nil ; Avoid jump on search
+ show-trailing-whitespace t
+ )
 
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -43,16 +38,12 @@
       "/" #'rg-menu
       ":" #'pp-eval-expression
       ";" #'counsel-M-x
-      "a" #'am/open-agenda
-      "k" #'am/select-clock
-      "x" #'org-capture
+      "a" (λ! (org-agenda nil "c"))
+      "e" (λ! (save-buffer))
 
-      "b n" #'evil-buffer-new
       "f j" #'counsel-file-jump
       "g b" #'dumb-jump-go
       "i d" #'evil-insert-digraph
-      "o =" #'ranger
-      "o c" #'quick-calc
       "s g" #'rg-dwim
       "s a" #'swiper-all
       "w <up>" #'am/fibonacci-resize
@@ -64,7 +55,7 @@
        "J" #'am/widen-to-web-mode
        "n" #'evil-ex-nohighlight
        "r" #'jump-to-register
-       "k" #'am/update-cookies))
+       ))
 
 (map! :i "C-v" #'evil-paste-before
       :i "C-k" #'evil-insert-digraph
@@ -80,22 +71,6 @@
 
 
 ;; FUNCTIONS ------------------------------
-
-(defun am/update-cookies ()
-  (interactive)
-  (org-update-statistics-cookies t))
-
-(defun am/print-file-name ()
-  (interactive)
-  (message (buffer-file-name)))
-
-(defun am/open-agenda ()
-  (interactive)
-  (org-agenda nil "c"))
-
-(defun am/select-clock ()
-  (interactive)
-  (org-clock-select-task))
 
 (defun am/fibonacci-resize ()
   (interactive)
@@ -135,11 +110,11 @@
             (lambda (&rest _)
               (set-face-italic 'font-lock-comment-face t)))
 
-(add-hook 'js2-mode-hook
-          (defun my-js2-mode-setup ()
-            (flycheck-mode t)
-            (when (executable-find "eslint")
-              (flycheck-select-checker 'javascript-eslint))))
+;; (add-hook 'js2-mode-hook
+;;           (defun my-js2-mode-setup ()
+;;             (flycheck-mode t)
+;;             (when (executable-find "eslint")
+;;               (flycheck-select-checker 'javascript-eslint))))
 
 
 ;; PACKAGES -------------------------------
@@ -168,9 +143,8 @@
 
    org-agenda-skip-scheduled-if-done t
    org-agenda-use-time-grid nil
-   ;; org-blank-before-new-entry '((heading) (plain-list-item))
    org-log-done 'time
-   org-todo-keywords '((sequence "TODO(t)" "STRT(s)" "WAIT(w)" "|" "DONE(d)" "KILL(k)"))
+   ;; org-todo-keywords '((sequence "TODO(t)" "STRT(s)" "WAIT(w)" "|" "DONE(d)" "KILL(k)"))
    org-reverse-note-order t
 
    org-agenda-custom-commands

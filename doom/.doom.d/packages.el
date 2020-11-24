@@ -32,6 +32,9 @@
 ;; our package manager can't deal with; see raxod502/straight.el#279)
 ;(package! builtin-package :recipe (:branch "develop"))
 
+(package! evil-escape :disable t)
+
 (package! rg)
 
-(package! evil-escape :disable t)
+(package! litable
+ :recipe (:host github :repo "Fuco1/litable"))
